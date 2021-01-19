@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xxd.mapper.UserMapper_xxd">
+	<resultMap id="BaseResultMap" type="com.xxd.pojo.User_xxd">
+		<id column="UserId_xxd" property="UserId_xxd"/>
+		<result column="UserName_xxd" property="UserName_xxd"/>
+		<result column="pwd_xxd" property="pwd_xxd"/>
+		<result column="tel_xxd" property="tel_xxd"/>
+		<result column="email_xxd" property="email_xxd"/>
+		<result column="address_xxd" property="address_xxd"/>
+		<result column="Credit_xxd" property="userIsAdmin_xxd"/>
+		<collection property="bid_xxd" ofType="com.xxd.pojo.Bid_xxd" select="com.xxd.mapper.BidMapper_xxd.getBidByUserId" column="UserId_xxd"/>
+		<collection property="goods_xxd" ofType="com.xxd.pojo.Goods_xxd" select="com.xxd.mapper.GoodsMapper_xxd.getGoodsByUserId" column="UserId_xxd"/>
+	</resultMap>
+	<select id="getUserByOnePage" parameterType="com.xxd.util.Page_xxd" resultMap="BaseResultMap">
+		select * from t_user_xxd limit #{start},#{count}
+	</select>
+	
+	<select id="isUser" parameterType="java.lang.String" resultType="java.lang.String">
+		select pwd_xxd from t_user_xxd where UserName_xxd = #{UserName_xxd}
+	</select>
+	
+	<select id="checkuseNameIsExist" parameterType="java.lang.String" resultType="Integer">
+		select count(*) from t_user_xxd where UserName_xxd = #{UserName_xxd}
+	</select>
+	
+	<insert id="insert" parameterType="com.xxd.pojo.User_xxd">
+		insert into t_user_xxd(UserName_xxd,pwd_xxd,tel_xxd,email_xxd,address_xxd,Credit_xxd) values(#{UserName_xxd},#{pwd_xxd},#{tel_xxd},#{email_xxd},#{address_xxd},#{userIsAdmin_xxd})
+	</insert>
+	
+	<select id="getUserByUserId" parameterType="Integer" resultMap="BaseResultMap">
+		select * from t_user_xxd where UserId_xxd = #{UserId_xxd}
+	</select>
+	
+	<select id="getUserByUnAndUpw" parameterType="com.xxd.pojo.User_xxd" resultMap="BaseResultMap">
+		select * from t_user_xxd 
+		<where>
+		<if test="UserName_xxd != null">
+			and UserName_xxd = #{UserName_xxd}
+		</if>
+		<if test="pwd_xxd != null">
+			and pwd_xxd = #{pwd_xxd}
+		</if>
+		</where>
+	</select>
+	
+	<update id="update" parameterType="com.xxd.pojo.User_xxd">
+	update t_user_xxd set UserName_xxd=#{UserName_xxd},pwd_xxd=#{pwd_xxd},tel_xxd=#{tel_xxd},email_xxd=#{email_xxd},address_xxd=#{address_xxd},Credit_xxd=#{userIsAdmin_xxd} where UserId_xxd = #{UserId_xxd} 
+	</update>
+</mapper>

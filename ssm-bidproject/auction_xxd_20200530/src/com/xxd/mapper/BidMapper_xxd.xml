@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xxd.mapper.BidMapper_xxd">
+	<resultMap id="BaseResultMap" type="com.xxd.pojo.Bid_xxd">
+		<id column="BidId_xxd" property="id_xxd"></id>
+		<result column="userId_xxd" property="UserId_xxd"/>
+		<result column="GoodsId_xxd" property="GoodsId_xxd"/>
+		<result column="BidTime_xxd" property="BidTime_xxd"/>
+		<result column="BidPrice_xxd" property="BidPrice_xxd"/>
+		<association property="user_xxd" javaType="com.xxd.pojo.User_xxd" select="com.xxd.mapper.UserMapper_xxd.getUserByUserId" column="userId_xxd"/>
+		<association property="goods_xxd" javaType="com.xxd.pojo.Goods_xxd" select="com.xxd.mapper.GoodsMapper_xxd.getGoodsByGoodsId" column="GoodsId_xxd"/>
+	</resultMap>
+	
+	<select id="getBidByGoodsId" parameterType="Integer" resultMap="BaseResultMap">
+		select * from t_bid_xxd where GoodsId_xxd = #{GoodsId_xxd} order by BidPrice_xxd desc
+	</select>
+	
+	<select id="getBidByUserId" parameterType="Integer" resultMap="BaseResultMap">
+		select * from t_bid_xxd where userId_xxd = #{UserId_xxd}
+	</select>
+	
+	<select id="getHighestPriceByGoodsId" parameterType="Integer" resultType="Integer">
+		select MAX(BidPrice_xxd) as max from t_bid_xxd where GoodsId_xxd= #{GoodsId_xxd}
+	</select>
+	
+	<insert id="insert" parameterType="com.xxd.pojo.Bid_xxd">
+		insert into t_bid_xxd(userId_xxd,GoodsId_xxd,BidTime_xxd,BidPrice_xxd) values(#{UserId_xxd},#{GoodsId_xxd},#{BidTime_xxd},#{BidPrice_xxd})
+	</insert>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from t_bid_xxd where GoodsId_xxd = #{GoodsId_xxd}
+	</delete>
+</mapper>
